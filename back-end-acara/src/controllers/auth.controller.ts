@@ -1,8 +1,9 @@
 import {Request, Response} from "express"
 import * as Yup from "yup"
 import userModel from "../models/user.model"
-import { encrypt } from "../utils/encryption"
-import { generateToken } from "../utils/jwt"
+import {encrypt} from "../utils/encryption"
+import {generateToken} from "../utils/jwt"
+import {IReqUser} from "../middleware/auth.middleware"
 
 type TRegister = {
 	fullName: string
@@ -68,48 +69,66 @@ export default {
 
 		try {
 			// ambil data user berdasarkan "identifier" -> email atau username
-			const  userByIdentifier = await userModel.findOne({
-				$or :[
+			const userByIdentifier = await userModel.findOne({
+				$or: [
 					{
-						email : identifier
+						email: identifier,
 					},
 					{
-						username : identifier
-					}
-				]
+						username: identifier,
+					},
+				],
 			})
 
-			if(!userByIdentifier){
+			if (!userByIdentifier) {
 				return res.status(403).json({
-					message : "User Not Found",
-					data : null
+					message: "User Not Found",
+					data: null,
 				})
 			}
-			
+
 			// validasi password
-			const validatePassword : boolean  =  encrypt(password) === userByIdentifier.password
-			if(!validatePassword){
+			const validatePassword: boolean =
+				encrypt(password) === userByIdentifier.password
+			if (!validatePassword) {
 				return res.status(403).json({
-					message : "User Not Found",
-					data : null
+					message: "User Not Found",
+					data: null,
 				})
 			}
 
-			const token  = generateToken({
-				id : userByIdentifier._id,
-				role : userByIdentifier.role,
+			const token = generateToken({
+				id: userByIdentifier._id,
+				role: userByIdentifier.role,
 			})
-
 
 			res.status(200).json({
-				message : "Login Success",
-				data :token
+				message: "Login Success",
+				data: token,
 			})
-
 		} catch (error) {
 			const err = error as unknown as Error
 			res.status(400).json({
-				message : err.message,
+				message: err.message,
+				data: null,
+			})
+		}
+	},
+	//me
+	async me(req: Request, res: Response) {
+		try {
+
+			const user = (req as IReqUser).user
+			const result = await userModel.findById(user?.id)
+			res.status(200).json({
+				message: "Success get user profile",
+				data: result,
+			})
+			
+		} catch (error) {
+			const err = error as unknown as Error
+			res.status(400).json({
+				message: err.message,
 				data: null,
 			})
 		}
