@@ -1,7 +1,6 @@
 import mongoose from "mongoose"
 import { encrypt } from "../utils/encryption"
-
-interface User {
+export interface IUser {
 	fullName: string
 	username: string
 	email: string
@@ -14,7 +13,7 @@ interface User {
 
 const Schema = mongoose.Schema
 
-const userSchema = new Schema<User>(
+const userSchema = new Schema<IUser>(
 	{
 		fullName: {
 			type: Schema.Types.String,
@@ -57,7 +56,6 @@ const userSchema = new Schema<User>(
 userSchema.pre("save" , function(next){
 	const user = this
 	user.password = encrypt(user.password)
-
 	next()
 })
 

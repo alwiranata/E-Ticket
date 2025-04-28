@@ -2,6 +2,7 @@ import {Request, Response} from "express"
 import * as Yup from "yup"
 import userModel from "../models/user.model"
 import { encrypt } from "../utils/encryption"
+import { generateToken } from "../utils/jwt"
 
 type TRegister = {
 	fullName: string
@@ -27,6 +28,7 @@ const registerValidationSchema = Yup.object({
 })
 
 export default {
+	//register
 	async register(req: Request, res: Response) {
 		const {fullName, username, email, password, confirmPassword} =
 			req.body as unknown as TRegister
@@ -59,6 +61,8 @@ export default {
 			})
 		}
 	},
+
+	//login
 	async login(req: Request, res: Response) {
 		const {identifier, password} = req.body as unknown as TLogin
 
@@ -81,7 +85,7 @@ export default {
 					data : null
 				})
 			}
-
+			
 			// validasi password
 			const validatePassword : boolean  =  encrypt(password) === userByIdentifier.password
 			if(!validatePassword){
@@ -91,9 +95,15 @@ export default {
 				})
 			}
 
+			const token  = generateToken({
+				id : userByIdentifier._id,
+				role : userByIdentifier.role,
+			})
+
+
 			res.status(200).json({
 				message : "Login Success",
-				data : userByIdentifier
+				data :token
 			})
 
 		} catch (error) {
