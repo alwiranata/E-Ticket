@@ -2,6 +2,8 @@ import express from "express"
 import router from "./routes/api"
 import bodyParser from "body-parser"
 import db from "./utils/database"
+import docs from "./docs/route"
+import cors from "cors"
 
 async function init() {
     try {
@@ -9,6 +11,8 @@ async function init() {
         console.log("Database Status : " , result)
  
         const app = express()
+        
+        app.use(cors())
         app.use(bodyParser.json())
     
         const PORT = 3000
@@ -21,7 +25,8 @@ async function init() {
         })
         
         app.use("/api", router)
-    
+        docs(app)
+
         app.listen(PORT, () => {
             console.log(`Server running on http://localhost:${PORT}`)
         })
