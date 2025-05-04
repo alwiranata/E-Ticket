@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Acara</title>
+		<style>
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				font-family: Arial, sans-serif;
+				background-color: #f6f6f6;
+				margin: 0;
+				padding: 0;
+				overflow-x: hidden;
+			}
+
+			.container {
+				background-color: #ffffff;
+				max-width: 600px;
+				margin: 30px auto;
+				padding: 30px;
+				border-radius: 10px;
+				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+			}
+
+			.header h1 {
+				text-align: center;
+				color: #333;
+				margin-bottom: 20px;
+			}
+
+			.content p {
+				font-size: 16px;
+				color: #555;
+				line-height: 1.6;
+				margin-bottom: 12px;
+			}
+
+			.content ul {
+				list-style: none;
+				padding-left: 0;
+				margin-bottom: 16px;
+			}
+
+			.content li {
+				padding: 8px 0;
+				border-bottom: 1px solid #eee;
+			}
+
+			.content li strong {
+				color: #222;
+			}
+
+			.button {
+				display: block;
+				width: 100%;
+				background-color: #007bff;
+				color: #fff !important;
+				padding: 12px 0;
+				text-align: center;
+				text-decoration: none;
+				border-radius: 6px;
+				font-weight: bold;
+				transition: background-color 0.3s ease;
+			}
+
+			.button:hover {
+				background-color: #0056b3;
+			}
+
+			.footer {
+				margin-top: 30px;
+				text-align: center;
+				font-size: 14px;
+				color: #999;
+			}
+
+			/* Responsif */
+			@media (max-width: 600px) {
+				.container {
+					width: 100%;
+					margin: 0;
+					border-radius: 0;
+					padding: 20px;
+				}
+
+				.button {
+					font-size: 16px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1>Selamat Datang</h1>
+			</div>
+			<div class="content">
+				<p>Halo <%= username %>,</p>
+				<p>
+					Terima kasih telah mendaftar di layanan kami. Berikut adalah informasi
+					dari akun Anda:
+				</p>
+				<ul>
+					<li><strong> Nama : </strong><%= fullName%></li>
+					<li><strong> Email : </strong><%= email></li>
+					<li><strong> Tanggal Pendaftaran : </strong><%= createdAt%></li>
+				</ul>
+				<p>Untuk memulai , silahkan klik tombol di bawah ini:</p>
+				<a
+					href="<%=activationLink%>"
+					class="button"
+					>Aktifkan Akun</a
+				>
+				<p>Jika anda memiliki pertanyaan jangan ragu hubungi kami!</p>
+				<p>Salam hangat , ACARA</p>
+			</div>
+			<div class="footer">
+				<p>
+					&copy; <span id="year"></span> ACARA EVENT MANAGEMENT SYSTEM. Semua
+					hak dilindungi
+				</p>
+			</div>
+		</div>
+		<script>
+			document.getElementById("year").textContent = new Date().getFullYear()
+		</script>
+	</body>
+</html>

@@ -3,6 +3,7 @@ import swaggerUi from "swagger-ui-express"
 import swaggerOutput from "./swagger_output.json"
 import fs from "fs"
 import path from "path"
+
 export default function docs(app: Express) {
     const  css = fs.readFileSync(
         path.resolve(

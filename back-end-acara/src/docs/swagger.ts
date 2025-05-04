@@ -1,6 +1,4 @@
-import { version } from "mongoose";
 import swaggerAutogen from "swagger-autogen";
-import { server } from "typescript";
 
 const doc = {
     info : {
