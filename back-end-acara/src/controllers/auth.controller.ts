@@ -31,6 +31,10 @@ const registerValidationSchema = Yup.object({
 export default {
 	//register
 	async register(req: Request, res: Response) {
+		/**
+		  #swagger.tags = ['Auth']
+		 */
+
 		const {fullName, username, email, password, confirmPassword} =
 			req.body as unknown as TRegister
 
@@ -50,6 +54,8 @@ export default {
 				password,
 			})
 
+			
+
 			res.status(200).json({
 				message: "Success Registrasion!",
 				data: result,
@@ -65,8 +71,10 @@ export default {
 
 	//login
 	async login(req: Request, res: Response) {
+		/**
+		  #swagger.tags = ['Auth']
+		 */
 		const {identifier, password} = req.body as unknown as TLogin
-
 		try {
 			// ambil data user berdasarkan "identifier" -> email atau username
 			const userByIdentifier = await userModel.findOne({
@@ -117,6 +125,7 @@ export default {
 	//me
 	async me(req: Request, res: Response) {
 		/**
+		  #swagger.tags = ['Auth']
 		  #swagger.security = [{
 		   "bearerAuth":[]
 		  }]
