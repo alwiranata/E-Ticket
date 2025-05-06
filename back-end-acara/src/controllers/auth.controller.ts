@@ -22,7 +22,28 @@ const registerValidationSchema = Yup.object({
 	fullName: Yup.string().required(),
 	username: Yup.string().required(),
 	email: Yup.string().email().required(),
-	password: Yup.string().required(),
+	password: Yup.string()
+		.required()
+		.min(6, "Password must be at least 6 characters")
+		.test(
+			"at-least-one-uppercase-letter",
+			"Contains at least one uppercase letter",
+			(value) => {
+				if (!value) return false
+				const regex = /^(?=.*[A-Z])/
+				return regex.test(value)
+			}
+		)
+		.test(
+			"at-least-one-uppercase-letter",
+			"Contains at least one uppercase letter",
+			(value) => {
+				if (!value) return false
+				const regex = /^(?=.*\d)/
+				return regex.test(value)
+			}
+		),
+		
 	confirmPassword: Yup.string()
 		.required()
 		.oneOf([Yup.ref("password")], "Password must be matched"),
@@ -53,8 +74,6 @@ export default {
 				email,
 				password,
 			})
-
-			
 
 			res.status(200).json({
 				message: "Success Registrasion!",
@@ -131,14 +150,12 @@ export default {
 		  }]
 		 */
 		try {
-
 			const user = (req as IReqUser).user
 			const result = await userModel.findById(user?.id)
 			res.status(200).json({
 				message: "Success get user profile",
 				data: result,
 			})
-			
 		} catch (error) {
 			const err = error as unknown as Error
 			res.status(400).json({
