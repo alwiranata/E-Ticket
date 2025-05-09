@@ -141,6 +141,7 @@ export default {
 			})
 		}
 	},
+
 	//me
 	async me(req: Request, res: Response) {
 		/**
@@ -164,4 +165,33 @@ export default {
 			})
 		}
 	},
+
+	async  activation(req : Request , res : Response){
+		try {
+			const { code }  = req.body as {code : string}
+
+			const user = await userModel.findOneAndUpdate(
+				{
+					activationCode : code
+				},
+				{
+					isActive : true
+				},
+				{
+					new : true
+				}
+			)
+			res.status(200).json({
+				message : "User successfully activated",
+				data : user
+			})
+		} catch (error) {
+			const err = error as unknown as Error
+			res.status(400).json({
+				message : err.message,
+				data : null
+			})
+
+		}
+	}
 }

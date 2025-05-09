@@ -62,6 +62,7 @@ const userSchema = new Schema<IUser>(
 userSchema.pre("save", function (next) {
 	const user = this
 	user.password = encrypt(user.password)
+	user.activationCode = encrypt(user.id)
 	next()
 })
 
