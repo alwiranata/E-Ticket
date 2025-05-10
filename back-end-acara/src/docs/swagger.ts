@@ -9,11 +9,11 @@ const doc = {
     } ,
     servers :  [
         {
-            url : "http://localhost:3000/",
+            url : "http://localhost:3000/api",
             description : "Local Server"
         },
         {
-            url : "https://back-end-acara-tawny-sigma.vercel.app/",
+            url : "https://back-end-acara-tawny-sigma.vercel.app/api",
             description : "Deploy Derver"
         }
     ],
