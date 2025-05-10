@@ -96,13 +96,15 @@ export default {
 		const {identifier, password} = req.body as unknown as TLogin
 		try {
 			// ambil data user berdasarkan "identifier" -> email atau username
+			const cleanIdentifier = identifier.toString().toLowerCase()
+
 			const userByIdentifier = await userModel.findOne({
 				$or: [
 					{
-						email: identifier,
+						email: cleanIdentifier,
 					},
 					{
-						username: identifier,
+						username: cleanIdentifier,
 					},
 				],
 			})
