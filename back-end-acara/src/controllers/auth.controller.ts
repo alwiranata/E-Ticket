@@ -43,7 +43,7 @@ const registerValidationSchema = Yup.object({
 				return regex.test(value)
 			}
 		),
-		
+
 	confirmPassword: Yup.string()
 		.required()
 		.oneOf([Yup.ref("password")], "Password must be matched"),
@@ -70,8 +70,8 @@ export default {
 
 			const result = await userModel.create({
 				fullName,
-				username,
-				email,
+				username: username.toLowerCase(),
+				email: email.toLowerCase(),
 				password,
 			})
 
@@ -98,16 +98,22 @@ export default {
 			// ambil data user berdasarkan "identifier" -> email atau username
 			const cleanIdentifier = identifier.toString().toLowerCase()
 
-			const userByIdentifier = await userModel.findOne({
-				$or: [
-					{
-						email: cleanIdentifier,
-					},
-					{
-						username: cleanIdentifier,
-					},
-				],
-			})
+			const userByIdentifier = await userModel.findOne(
+				{
+					$or: [
+						{
+							email: cleanIdentifier,
+						},
+						{
+							username: cleanIdentifier,
+						},
+					],
+				},
+				null,
+				{
+					collation: {locale: "en", strength: 2},
+				}
+			)
 
 			if (!userByIdentifier) {
 				return res.status(403).json({
@@ -126,10 +132,11 @@ export default {
 				})
 			}
 
-			if(!userByIdentifier.isActive){
+			if (!userByIdentifier.isActive) {
 				return res.status(403).json({
-					message : "Akun belum diaktivasi. silahkan cek email anda untuk aktivasi ",
-					data : null
+					message:
+						"Akun belum diaktivasi. silahkan cek email anda untuk aktivasi ",
+					data: null,
 				})
 			}
 
@@ -175,7 +182,7 @@ export default {
 		}
 	},
 
-	async  activation(req : Request , res : Response){
+	async activation(req: Request, res: Response) {
 		/**
 		  #swagger.tags  = ['Auth']
 		  #swagger.requestBody = {
@@ -184,30 +191,29 @@ export default {
 		  }
 		 */
 		try {
-			const { code }  = req.body as {code : string}
+			const {code} = req.body as {code: string}
 
 			const user = await userModel.findOneAndUpdate(
 				{
-					activationCode : code
+					activationCode: code,
 				},
 				{
-					isActive : true
+					isActive: true,
 				},
 				{
-					new : true
+					new: true,
 				}
 			)
 			res.status(200).json({
-				message : "User successfully activated",
-				data : user
+				message: "User successfully activated",
+				data: user,
 			})
 		} catch (error) {
 			const err = error as unknown as Error
 			res.status(400).json({
-				message : err.message,
-				data : null
+				message: err.message,
+				data: null,
 			})
-
 		}
-	}
+	},
 }

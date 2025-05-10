@@ -26,7 +26,7 @@ const doc = {
         },
         schemas : {
             LoginRequest :{
-                identifier : "aldp@gmail.com",
+                identifier : "aldo@gmail.com",
                 password : " 12345678"
             },
 
