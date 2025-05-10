@@ -124,6 +124,13 @@ export default {
 				})
 			}
 
+			if(!userByIdentifier.isActive){
+				return res.status(403).json({
+					message : "Akun belum diaktivasi. silahkan cek email anda untuk aktivasi ",
+					data : null
+				})
+			}
+
 			const token = generateToken({
 				id: userByIdentifier._id,
 				role: userByIdentifier.role,
@@ -167,6 +174,13 @@ export default {
 	},
 
 	async  activation(req : Request , res : Response){
+		/**
+		  #swagger.tags  = ['Auth']
+		  #swagger.requestBody = {
+		  required : true,
+		  schema : {$ref : '#/components/schemas/ActivationRequest'}
+		  }
+		 */
 		try {
 			const { code }  = req.body as {code : string}
 

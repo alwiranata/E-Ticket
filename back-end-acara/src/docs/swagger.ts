@@ -1,3 +1,4 @@
+import { resolveContent } from "nodemailer/lib/shared";
 import swaggerAutogen from "swagger-autogen";
 
 const doc = {
@@ -23,14 +24,27 @@ const doc = {
                 scheme : "bearer",
             },
         },
-    },
+        schemas : {
+            LoginRequest :{
+                identifier : "aldp@gmail.com",
+                password : " 12345678"
+            },
 
-    schemas : {
-        LoginRequest :{
-            identifier : "aldp@gmail.com",
-            password : " 12345678"
+            RegisterRequest :{
+                fullname : "ALdo",
+                username : "Wiranata",
+                email : "aldowiranat16@gmail.com",
+                password : "12345678",
+                confirmPassword : "12345678"
+            },
+
+            ActivationRequest : {
+                code : "123456"
+            }
         }
-    }
+
+
+    },
     
 
 }
